@@ -4,14 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Loan Simulator | Financial Planning</title>
+
+    <title>Loan Simulator</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-    <!-- jsPDF and AutoTable -->
+    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 
@@ -27,7 +28,7 @@
             --text: #263445;
             --muted: #8190A5;
             --border: #E5EAF0;
-            --shadow: 0 8px 30px rgba(22, 50, 79, 0.06);
+            --shadow: 0 8px 30px rgba(22,50,79,0.06);
         }
 
         * {
@@ -56,6 +57,7 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            gap: 15px;
         }
 
         .brand {
@@ -77,7 +79,6 @@
         .brand h1 {
             font-size: 19px;
             font-weight: 700;
-            letter-spacing: -0.5px;
         }
 
         .brand p {
@@ -86,12 +87,34 @@
             margin-top: 3px;
         }
 
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
         .header-label {
-            font-size: 12px;
+            font-size: 11px;
             color: #C8D5E2;
             border: 1px solid #496078;
             padding: 8px 13px;
             border-radius: 20px;
+        }
+
+        .language-selector {
+            background: #24435F;
+            color: white;
+            border: 1px solid #496078;
+            border-radius: 9px;
+            padding: 10px 12px;
+            font-size: 12px;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .language-selector option {
+            background: white;
+            color: var(--navy);
         }
 
         /* MAIN */
@@ -180,10 +203,6 @@
             color: var(--text);
         }
 
-        .input-wrapper {
-            position: relative;
-        }
-
         .input-wrapper input,
         .input-wrapper select {
             width: 100%;
@@ -202,11 +221,7 @@
         .input-wrapper select:focus {
             border-color: var(--blue);
             background: white;
-            box-shadow: 0 0 0 3px rgba(58, 134, 255, 0.1);
-        }
-
-        .input-wrapper input::placeholder {
-            color: #AAB5C2;
+            box-shadow: 0 0 0 3px rgba(58,134,255,0.1);
         }
 
         .input-hint {
@@ -233,12 +248,6 @@
         .button:hover {
             transform: translateY(-2px);
             filter: brightness(0.96);
-        }
-
-        .button:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-            transform: none;
         }
 
         .primary-button {
@@ -329,7 +338,7 @@
             color: #B8C8D9;
         }
 
-        /* LOAN DETAILS */
+        /* DETAILS */
 
         .details-grid {
             display: grid;
@@ -364,10 +373,6 @@
         }
 
         .table-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 15px;
             margin-bottom: 20px;
         }
 
@@ -440,8 +445,6 @@
             margin: 20px 0 35px;
         }
 
-        /* FOOTER */
-
         footer {
             text-align: center;
             padding: 25px;
@@ -456,6 +459,12 @@
 
             header {
                 padding: 18px 20px;
+                flex-wrap: wrap;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
             }
 
             .header-label {
@@ -482,10 +491,6 @@
 
             .summary-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .summary-card {
-                padding: 19px;
             }
 
             .details-grid {
@@ -592,46 +597,64 @@
     <!-- HEADER -->
 
     <header>
+
         <div class="brand">
+
             <div class="brand-icon">▤</div>
 
             <div>
                 <h1>Loan Simulator</h1>
-                <p>Smart Financial Planning</p>
+                <p data-i18n="brandSubtitle"></p>
             </div>
+
         </div>
 
-        <div class="header-label">
-            FINANCIAL CALCULATOR
+        <div class="header-right">
+
+            <div class="header-label" data-i18n="headerLabel"></div>
+
+            <select
+                id="languageSelector"
+                class="language-selector"
+                aria-label="Select language"
+            >
+                <option value="es">🇨🇴 Español</option>
+                <option value="en">🇺🇸 English</option>
+            </select>
+
         </div>
+
     </header>
 
 
     <main>
 
-        <!-- INTRODUCTION -->
+        <!-- INTRO -->
 
         <div class="intro">
-            <h2>Plan your loan.</h2>
-            <p>
-                Calculate your monthly payments and explore your
-                complete loan amortization schedule.
-            </p>
+
+            <h2 data-i18n="introTitle"></h2>
+
+            <p data-i18n="introDescription"></p>
+
         </div>
 
 
-        <!-- INPUT FORM -->
+        <!-- FORM -->
 
         <section class="card no-print">
 
             <div class="section-heading">
+
                 <div class="section-icon">▤</div>
 
                 <div>
-                    <h3>Loan Information</h3>
-                    <p>Enter your loan details to get started.</p>
+                    <h3 data-i18n="formTitle"></h3>
+                    <p data-i18n="formDescription"></p>
                 </div>
+
             </div>
+
 
             <form id="loanForm">
 
@@ -639,97 +662,75 @@
 
                     <div class="form-group">
 
-                        <label for="amount">
-                            💰 Loan Amount
-                        </label>
+                        <label for="amount" data-i18n="amountLabel"></label>
 
                         <div class="input-wrapper">
                             <input
                                 type="number"
                                 id="amount"
-                                placeholder="e.g. 50000000"
                                 min="0.01"
                                 step="0.01"
                                 required
                             >
                         </div>
 
-                        <span class="input-hint">
-                            Enter the total amount you wish to borrow.
-                        </span>
+                        <span class="input-hint" data-i18n="amountHint"></span>
 
                     </div>
 
 
                     <div class="form-group">
 
-                        <label for="interest">
-                            📈 Interest Rate (%)
-                        </label>
+                        <label for="interest" data-i18n="interestLabel"></label>
 
                         <div class="input-wrapper">
                             <input
                                 type="number"
                                 id="interest"
-                                placeholder="e.g. 12"
                                 min="0"
                                 step="0.01"
                                 required
                             >
                         </div>
 
-                        <span class="input-hint">
-                            Enter the annual or monthly interest percentage.
-                        </span>
+                        <span class="input-hint" data-i18n="interestHint"></span>
 
                     </div>
 
 
                     <div class="form-group">
 
-                        <label for="rateType">
-                            🔄 Interest Rate Type
-                        </label>
+                        <label for="rateType" data-i18n="rateTypeLabel"></label>
 
                         <div class="input-wrapper">
-                            <select id="rateType" required>
-                                <option value="EM">
-                                    Effective Monthly (EM)
-                                </option>
 
-                                <option value="EA">
-                                    Effective Annual (EA)
-                                </option>
+                            <select id="rateType" required>
+                                <option value="EM" data-i18n="monthlyRate"></option>
+                                <option value="EA" data-i18n="annualRate"></option>
                             </select>
+
                         </div>
 
-                        <span class="input-hint">
-                            Select the interest rate convention.
-                        </span>
+                        <span class="input-hint" data-i18n="rateHint"></span>
 
                     </div>
 
 
                     <div class="form-group">
 
-                        <label for="months">
-                            📅 Loan Term (Months)
-                        </label>
+                        <label for="months" data-i18n="monthsLabel"></label>
 
                         <div class="input-wrapper">
                             <input
                                 type="number"
                                 id="months"
-                                placeholder="e.g. 36"
                                 min="1"
                                 step="1"
                                 required
                             >
                         </div>
 
-                        <span class="input-hint">
-                            Enter the total repayment period in months.
-                        </span>
+                        <span class="input-hint" data-i18n="monthsHint"></span>
 
                     </div>
 
@@ -738,7 +739,7 @@
 
                 <button type="submit" class="button primary-button">
                     <span>✦</span>
-                    Calculate Loan
+                    <span data-i18n="calculateButton"></span>
                 </button>
 
             </form>
@@ -751,69 +752,54 @@
         <section id="results">
 
             <div class="results-title">
-                <h3>Your Loan Overview</h3>
-                <p>Here is a summary of your calculated loan.</p>
+
+                <h3 data-i18n="resultsTitle"></h3>
+
+                <p data-i18n="resultsDescription"></p>
+
             </div>
 
 
-            <!-- SUMMARY CARDS -->
+            <!-- SUMMARY -->
 
             <div class="summary-grid">
 
                 <div class="summary-card highlight">
 
-                    <div class="summary-label">
-                        MONTHLY PAYMENT
-                    </div>
+                    <div class="summary-label" data-i18n="monthlyPaymentLabel"></div>
 
-                    <div class="summary-value" id="monthlyPayment">
-                        $0.00
-                    </div>
+                    <div class="summary-value" id="monthlyPayment"></div>
 
-                    <div class="summary-description">
-                        Your fixed monthly installment
-                    </div>
+                    <div class="summary-description" data-i18n="monthlyPaymentDescription"></div>
 
                 </div>
 
 
                 <div class="summary-card">
 
-                    <div class="summary-label">
-                        TOTAL INTEREST
-                    </div>
+                    <div class="summary-label" data-i18n="totalInterestLabel"></div>
 
-                    <div class="summary-value" id="totalInterest">
-                        $0.00
-                    </div>
+                    <div class="summary-value" id="totalInterest"></div>
 
-                    <div class="summary-description">
-                        Total interest paid throughout the loan
-                    </div>
+                    <div class="summary-description" data-i18n="totalInterestDescription"></div>
 
                 </div>
 
 
                 <div class="summary-card">
 
-                    <div class="summary-label">
-                        TOTAL PAYMENT
-                    </div>
+                    <div class="summary-label" data-i18n="totalPaymentLabel"></div>
 
-                    <div class="summary-value" id="totalPayment">
-                        $0.00
-                    </div>
+                    <div class="summary-value" id="totalPayment"></div>
 
-                    <div class="summary-description">
-                        Principal plus interest
-                    </div>
+                    <div class="summary-description" data-i18n="totalPaymentDescription"></div>
 
                 </div>
 
             </div>
 
 
-            <!-- LOAN DETAILS -->
+            <!-- DETAILS -->
 
             <div class="card">
 
@@ -822,8 +808,8 @@
                     <div class="section-icon">◈</div>
 
                     <div>
-                        <h3>Loan Details</h3>
-                        <p>Information about your calculated loan.</p>
+                        <h3 data-i18n="detailsTitle"></h3>
+                        <p data-i18n="detailsDescription"></p>
                     </div>
 
                 </div>
@@ -832,33 +818,33 @@
                 <div class="details-grid">
 
                     <div class="detail-item">
-                        <span>Loan Amount</span>
+                        <span data-i18n="detailAmount"></span>
                         <strong id="loanAmount"></strong>
                     </div>
 
                     <div class="detail-item">
-                        <span>Original Interest Rate</span>
+                        <span data-i18n="detailOriginalRate"></span>
                         <strong id="originalRate"></strong>
                     </div>
 
                     <div class="detail-item">
-                        <span>Monthly Effective Rate</span>
+                        <span data-i18n="detailMonthlyRate"></span>
                         <strong id="effectiveRate"></strong>
                     </div>
 
                     <div class="detail-item">
-                        <span>Loan Term</span>
+                        <span data-i18n="detailTerm"></span>
                         <strong id="loanTerm"></strong>
                     </div>
 
                     <div class="detail-item">
-                        <span>Amortization System</span>
-                        <strong>French Method</strong>
+                        <span data-i18n="detailSystem"></span>
+                        <strong data-i18n="frenchMethod"></strong>
                     </div>
 
                     <div class="detail-item">
-                        <span>Payment Frequency</span>
-                        <strong>Monthly</strong>
+                        <span data-i18n="detailFrequency"></span>
+                        <strong data-i18n="monthlyFrequency"></strong>
                     </div>
 
                 </div>
@@ -866,16 +852,15 @@
             </div>
 
 
-            <!-- AMORTIZATION TABLE -->
+            <!-- TABLE -->
 
             <div class="card table-card">
 
                 <div class="table-header">
 
-                    <div>
-                        <h3>Amortization Schedule</h3>
-                        <p>Detailed breakdown of every monthly payment.</p>
-                    </div>
+                    <h3 data-i18n="tableTitle"></h3>
+
+                    <p data-i18n="tableDescription"></p>
 
                 </div>
 
@@ -886,12 +871,12 @@
 
                         <thead>
                             <tr>
-                                <th>Month</th>
-                                <th>Initial Balance</th>
-                                <th>Payment</th>
-                                <th>Interest</th>
-                                <th>Principal</th>
-                                <th>Final Balance</th>
+                                <th data-i18n="columnMonth"></th>
+                                <th data-i18n="columnInitial"></th>
+                                <th data-i18n="columnPayment"></th>
+                                <th data-i18n="columnInterest"></th>
+                                <th data-i18n="columnPrincipal"></th>
+                                <th data-i18n="columnFinal"></th>
                             </tr>
                         </thead>
 
@@ -904,7 +889,7 @@
             </div>
 
 
-            <!-- PRINT AND PDF BUTTONS -->
+            <!-- ACTION BUTTONS -->
 
             <div class="actions no-print">
 
@@ -913,7 +898,7 @@
                     class="button print-button"
                     id="printButton"
                 >
-                    🖨 Print Results
+                    🖨 <span data-i18n="printButton"></span>
                 </button>
 
                 <button
@@ -921,7 +906,7 @@
                     class="button pdf-button"
                     id="pdfButton"
                 >
-                    ↓ Export to PDF
+                    ↓ <span data-i18n="pdfButton"></span>
                 </button>
 
             </div>
@@ -931,39 +916,290 @@
     </main>
 
 
-    <!-- FOOTER -->
-
-    <footer>
-        Loan Simulator | Smart Financial Planning
-    </footer>
+    <footer data-i18n="footer"></footer>
 
 
     <script>
+
+        // =====================================
+        // 1. TRANSLATION DICTIONARY
+        // =====================================
+
+        const translations = {
+
+            es: {
+
+                brandSubtitle: "Planificación financiera inteligente",
+                headerLabel: "CALCULADORA FINANCIERA",
+
+                introTitle: "Planifica tu préstamo.",
+                introDescription: "Calcula tus cuotas mensuales y consulta tu plan completo de amortización.",
+
+                formTitle: "Información del préstamo",
+                formDescription: "Ingresa los datos de tu préstamo para comenzar.",
+
+                amountLabel: "💰 Monto del préstamo",
+                amountHint: "Ingresa el monto total que deseas solicitar.",
+
+                interestLabel: "📈 Tasa de interés (%)",
+                interestHint: "Ingresa el porcentaje de interés mensual o anual.",
+
+                rateTypeLabel: "🔄 Tipo de tasa de interés",
+                monthlyRate: "Efectiva Mensual (EM)",
+                annualRate: "Efectiva Anual (EA)",
+                rateHint: "Selecciona el tipo de tasa de interés.",
+
+                monthsLabel: "📅 Plazo del préstamo (meses)",
+                monthsHint: "Ingresa el período total de pago en meses.",
+
+                calculateButton: "Calcular préstamo",
+
+                resultsTitle: "Resumen de tu préstamo",
+                resultsDescription: "Aquí encontrarás el resumen de tu simulación.",
+
+                monthlyPaymentLabel: "CUOTA MENSUAL",
+                monthlyPaymentDescription: "Tu cuota mensual fija",
+
+                totalInterestLabel: "INTERESES TOTALES",
+                totalInterestDescription: "Intereses pagados durante el préstamo",
+
+                totalPaymentLabel: "PAGO TOTAL",
+                totalPaymentDescription: "Capital más intereses",
+
+                detailsTitle: "Detalles del préstamo",
+                detailsDescription: "Información de tu préstamo calculado.",
+
+                detailAmount: "Monto del préstamo",
+                detailOriginalRate: "Tasa de interés ingresada",
+                detailMonthlyRate: "Tasa efectiva mensual",
+                detailTerm: "Plazo",
+                detailSystem: "Sistema de amortización",
+                detailFrequency: "Frecuencia de pago",
+
+                frenchMethod: "Método francés",
+                monthlyFrequency: "Mensual",
+
+                tableTitle: "Tabla de amortización",
+                tableDescription: "Desglose detallado de cada cuota mensual.",
+
+                columnMonth: "Mes",
+                columnInitial: "Saldo inicial",
+                columnPayment: "Cuota",
+                columnInterest: "Intereses",
+                columnPrincipal: "Abono a capital",
+                columnFinal: "Saldo final",
+
+                printButton: "Imprimir resultados",
+                pdfButton: "Exportar a PDF",
+
+                footer: "Loan Simulator | Planificación financiera",
+
+                errorInvalid: "Por favor, ingresa valores válidos. El monto y el plazo deben ser positivos y la tasa no puede ser negativa.",
+                errorRate: "La tasa anual ingresada es demasiado alta.",
+                errorCalculate: "Primero debes calcular un préstamo.",
+                errorPDF: "No se pudo cargar la biblioteca PDF. Comprueba tu conexión a Internet.",
+
+                pdfSubtitle: "Reporte de planificación financiera",
+                pdfSummary: "Resumen del préstamo",
+                pdfAmount: "Monto del préstamo",
+                pdfRate: "Tasa de interés",
+                pdfMonthlyRate: "Tasa efectiva mensual",
+                pdfTerm: "Plazo",
+                pdfPayment: "Cuota mensual",
+                pdfTotalInterest: "Intereses totales",
+                pdfTotalPayment: "Pago total",
+                pdfFooter: "Loan Simulator | Planificación financiera",
+                pdfPage: "Página"
+
+            },
+
+
+            en: {
+
+                brandSubtitle: "Smart Financial Planning",
+                headerLabel: "FINANCIAL CALCULATOR",
+
+                introTitle: "Plan your loan.",
+                introDescription: "Calculate your monthly payments and explore your complete amortization schedule.",
+
+                formTitle: "Loan Information",
+                formDescription: "Enter your loan details to get started.",
+
+                amountLabel: "💰 Loan Amount",
+                amountHint: "Enter the total amount you wish to borrow.",
+
+                interestLabel: "📈 Interest Rate (%)",
+                interestHint: "Enter the monthly or annual interest percentage.",
+
+                rateTypeLabel: "🔄 Interest Rate Type",
+                monthlyRate: "Effective Monthly (EM)",
+                annualRate: "Effective Annual (EA)",
+                rateHint: "Select the interest rate type.",
+
+                monthsLabel: "📅 Loan Term (Months)",
+                monthsHint: "Enter the total repayment period in months.",
+
+                calculateButton: "Calculate Loan",
+
+                resultsTitle: "Your Loan Overview",
+                resultsDescription: "Here is a summary of your calculated loan.",
+
+                monthlyPaymentLabel: "MONTHLY PAYMENT",
+                monthlyPaymentDescription: "Your fixed monthly installment",
+
+                totalInterestLabel: "TOTAL INTEREST",
+                totalInterestDescription: "Interest paid throughout the loan",
+
+                totalPaymentLabel: "TOTAL PAYMENT",
+                totalPaymentDescription: "Principal plus interest",
+
+                detailsTitle: "Loan Details",
+                detailsDescription: "Information about your calculated loan.",
+
+                detailAmount: "Loan Amount",
+                detailOriginalRate: "Original Interest Rate",
+                detailMonthlyRate: "Monthly Effective Rate",
+                detailTerm: "Loan Term",
+                detailSystem: "Amortization System",
+                detailFrequency: "Payment Frequency",
+
+                frenchMethod: "French Method",
+                monthlyFrequency: "Monthly",
+
+                tableTitle: "Amortization Schedule",
+                tableDescription: "Detailed breakdown of every monthly payment.",
+
+                columnMonth: "Month",
+                columnInitial: "Initial Balance",
+                columnPayment: "Payment",
+                columnInterest: "Interest",
+                columnPrincipal: "Principal",
+                columnFinal: "Final Balance",
+
+                printButton: "Print Results",
+                pdfButton: "Export to PDF",
+
+                footer: "Loan Simulator | Financial Planning",
+
+                errorInvalid: "Please enter valid values. The amount and term must be positive, and the interest rate cannot be negative.",
+                errorRate: "The annual interest rate entered is too high.",
+                errorCalculate: "Please calculate a loan first.",
+                errorPDF: "The PDF library could not be loaded. Check your internet connection.",
+
+                pdfSubtitle: "Financial Planning Report",
+                pdfSummary: "Loan Summary",
+                pdfAmount: "Loan Amount",
+                pdfRate: "Interest Rate",
+                pdfMonthlyRate: "Monthly Effective Rate",
+                pdfTerm: "Loan Term",
+                pdfPayment: "Monthly Payment",
+                pdfTotalInterest: "Total Interest",
+                pdfTotalPayment: "Total Payment",
+                pdfFooter: "Loan Simulator | Financial Planning",
+                pdfPage: "Page"
+
+            }
+
+        };
+
+
+        // =====================================
+        // 2. APPLICATION VARIABLES
+        // =====================================
 
         const form = document.getElementById("loanForm");
 
         const results = document.getElementById("results");
 
-        const printButton = document.getElementById("printButton");
+        const tableBody = document.getElementById("tableBody");
 
-        const pdfButton = document.getElementById("pdfButton");
+        const languageSelector =
+            document.getElementById("languageSelector");
+
+        let currentLanguage = "es";
 
         let currentSimulation = null;
 
 
-        // FORMAT NUMBERS
+        // =====================================
+        // 3. LANGUAGE FUNCTIONS
+        // =====================================
 
-        function formatNumber(value) {
+        function translate(key) {
 
-            return value.toLocaleString("es-CO", {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            });
+            return translations[currentLanguage][key];
 
         }
 
 
-        // CALCULATE LOAN
+        function updateLanguage() {
+
+            const language = currentLanguage;
+
+            // Update HTML language attribute
+            document.documentElement.lang = language;
+
+            // Translate all static interface elements
+            document.querySelectorAll("[data-i18n]").forEach(element => {
+
+                const key = element.getAttribute("data-i18n");
+
+                element.textContent = translate(key);
+
+            });
+
+            // Update input placeholders
+            document.getElementById("amount").placeholder =
+                language === "es" ? "Ej. 50000000" : "e.g. 50000000";
+
+            document.getElementById("interest").placeholder =
+                language === "es" ? "Ej. 12" : "e.g. 12";
+
+            document.getElementById("months").placeholder =
+                language === "es" ? "Ej. 36" : "e.g. 36";
+
+            // Update visible results without recalculating
+            if (currentSimulation) {
+
+                displayResults();
+
+            }
+
+        }
+
+
+        languageSelector.addEventListener("change", function() {
+
+            currentLanguage = this.value;
+
+            updateLanguage();
+
+        });
+
+
+        // =====================================
+        // 4. NUMBER FORMATTING
+        // =====================================
+
+        function formatNumber(value) {
+
+            const locale =
+                currentLanguage === "es" ? "es-CO" : "en-US";
+
+            return new Intl.NumberFormat(locale, {
+
+                minimumFractionDigits: 2,
+
+                maximumFractionDigits: 2
+
+            }).format(value);
+
+        }
+
+
+        // =====================================
+        // 5. CALCULATE LOAN
+        // =====================================
 
         form.addEventListener("submit", function(event) {
 
@@ -996,7 +1232,7 @@
                 months <= 0
             ) {
 
-                alert("Please enter valid loan information.");
+                alert(translate("errorInvalid"));
 
                 return;
 
@@ -1005,7 +1241,7 @@
 
             if (rateType === "EA" && interest > 100000) {
 
-                alert("The annual interest rate is too high.");
+                alert(translate("errorRate"));
 
                 return;
 
@@ -1111,7 +1347,7 @@
             }
 
 
-            // SAVE CURRENT SIMULATION
+            // SAVE SIMULATION
 
             currentSimulation = {
 
@@ -1136,42 +1372,68 @@
             };
 
 
-            // DISPLAY SUMMARY
+            displayResults();
+
+            results.style.display = "block";
+
+            results.scrollIntoView({
+
+                behavior: "smooth",
+
+                block: "start"
+
+            });
+
+        });
+
+
+        // =====================================
+        // 6. DISPLAY RESULTS
+        // =====================================
+
+        function displayResults() {
+
+            const simulation = currentSimulation;
+
+            if (!simulation) return;
+
+
+            // SUMMARY
 
             document.getElementById("monthlyPayment").textContent =
-                "$ " + formatNumber(payment);
+                formatNumber(simulation.payment);
 
             document.getElementById("totalInterest").textContent =
-                "$ " + formatNumber(totalInterest);
+                formatNumber(simulation.totalInterest);
 
             document.getElementById("totalPayment").textContent =
-                "$ " + formatNumber(totalPayment);
+                formatNumber(simulation.totalPayment);
 
 
-            // DISPLAY LOAN DETAILS
+            // DETAILS
 
             document.getElementById("loanAmount").textContent =
-                "$ " + formatNumber(amount);
+                formatNumber(simulation.amount);
 
             document.getElementById("originalRate").textContent =
-                interest + "% " + rateType;
+                simulation.interest + "% " +
+                (simulation.rateType === "EA"
+                    ? translate("annualRate")
+                    : translate("monthlyRate"));
 
             document.getElementById("effectiveRate").textContent =
-                (rate * 100).toFixed(4) + "%";
+                (simulation.monthlyRate * 100).toFixed(4) + "%";
 
             document.getElementById("loanTerm").textContent =
-                months + " months";
+                simulation.months + " " +
+                (currentLanguage === "es" ? "meses" : "months");
 
 
-            // GENERATE TABLE
-
-            const tableBody =
-                document.getElementById("tableBody");
+            // TABLE
 
             tableBody.innerHTML = "";
 
-
-            schedule.forEach(rowData => {
+            simulation.schedule.forEach(rowData => {
 
                 const row = document.createElement("tr");
 
@@ -1207,280 +1469,302 @@
 
             });
 
+        }
 
-            // SHOW RESULTS
 
-            results.style.display = "block";
+        // =====================================
+        // 7. PRINT FUNCTION
+        // =====================================
 
-            results.scrollIntoView({
+        document.getElementById("printButton")
+            .addEventListener("click", function() {
 
-                behavior: "smooth",
+                if (!currentSimulation) {
 
-                block: "start"
+                    alert(translate("errorCalculate"));
 
-            });
-
-        });
-
-
-
-        // PRINT FUNCTION
-
-        printButton.addEventListener("click", function() {
-
-            if (!currentSimulation) {
-
-                alert("Please calculate a loan first.");
-
-                return;
-
-            }
-
-            window.print();
-
-        });
-
-
-
-        // EXPORT PDF FUNCTION
-
-        pdfButton.addEventListener("click", function() {
-
-            if (!currentSimulation) {
-
-                alert("Please calculate a loan first.");
-
-                return;
-
-            }
-
-
-            if (!window.jspdf || !window.jspdf.jsPDF) {
-
-                alert("The PDF library could not be loaded. Check your internet connection.");
-
-                return;
-
-            }
-
-
-            const { jsPDF } = window.jspdf;
-
-            const doc = new jsPDF({
-
-                orientation: "landscape",
-
-                unit: "mm",
-
-                format: "a4"
-
-            });
-
-
-            const simulation = currentSimulation;
-
-
-            // PDF TITLE
-
-            doc.setFont("helvetica", "bold");
-
-            doc.setFontSize(22);
-
-            doc.setTextColor(22, 50, 79);
-
-            doc.text("Loan Simulator", 15, 20);
-
-
-            doc.setFont("helvetica", "normal");
-
-            doc.setFontSize(10);
-
-            doc.setTextColor(120, 135, 150);
-
-            doc.text("Financial Planning Report", 15, 27);
-
-
-            // LOAN INFORMATION
-
-            doc.setTextColor(38, 52, 69);
-
-            doc.setFontSize(11);
-
-            doc.setFont("helvetica", "bold");
-
-            doc.text("Loan Summary", 15, 39);
-
-
-            const summary = [
-
-                ["Loan Amount", "$ " + formatNumber(simulation.amount)],
-
-                ["Interest Rate", simulation.interest + "% " + simulation.rateType],
-
-                ["Monthly Effective Rate", (simulation.monthlyRate * 100).toFixed(4) + "%"],
-
-                ["Loan Term", simulation.months + " months"],
-
-                ["Monthly Payment", "$ " + formatNumber(simulation.payment)],
-
-                ["Total Interest", "$ " + formatNumber(simulation.totalInterest)],
-
-                ["Total Payment", "$ " + formatNumber(simulation.totalPayment)]
-
-            ];
-
-
-            doc.setFont("helvetica", "normal");
-
-            doc.setFontSize(9);
-
-
-            let y = 47;
-
-
-            summary.forEach((item, index) => {
-
-                const x = index % 2 === 0 ? 15 : 155;
-
-                const currentY = y + Math.floor(index / 2) * 7;
-
-                doc.setFont("helvetica", "bold");
-
-                doc.text(item[0] + ":", x, currentY);
-
-                doc.setFont("helvetica", "normal");
-
-                doc.text(item[1], x + 43, currentY);
-
-            });
-
-
-            // AMORTIZATION TABLE
-
-            const tableData = simulation.schedule.map(row => [
-
-                row.month,
-
-                formatNumber(row.initialBalance),
-
-                formatNumber(row.payment),
-
-                formatNumber(row.interest),
-
-                formatNumber(row.capital),
-
-                formatNumber(row.finalBalance)
-
-            ]);
-
-
-            doc.autoTable({
-
-                startY: 76,
-
-                head: [[
-
-                    "Month",
-
-                    "Initial Balance",
-
-                    "Payment",
-
-                    "Interest",
-
-                    "Principal",
-
-                    "Final Balance"
-
-                ]],
-
-                body: tableData,
-
-                theme: "grid",
-
-                margin: {
-
-                    left: 15,
-
-                    right: 15
-
-                },
-
-                styles: {
-
-                    font: "helvetica",
-
-                    fontSize: 8,
-
-                    cellPadding: 3,
-
-                    halign: "right"
-
-                },
-
-                headStyles: {
-
-                    fillColor: [22, 50, 79],
-
-                    textColor: [255, 255, 255],
-
-                    fontStyle: "bold",
-
-                    halign: "center"
-
-                },
-
-                alternateRowStyles: {
-
-                    fillColor: [244, 246, 248]
-
-                },
-
-                columnStyles: {
-
-                    0: { halign: "center" }
-
-                },
-
-                didDrawPage: function(data) {
-
-                    const pageHeight =
-                        doc.internal.pageSize.getHeight();
-
-                    doc.setFontSize(8);
-
-                    doc.setTextColor(130, 140, 150);
-
-                    doc.text(
-
-                        "Loan Simulator | Financial Planning",
-
-                        15,
-
-                        pageHeight - 8
-
-                    );
-
-                    doc.text(
-
-                        "Page " + doc.internal.getNumberOfPages(),
-
-                        doc.internal.pageSize.getWidth() - 25,
-
-                        pageHeight - 8
-
-                    );
+                    return;
 
                 }
 
+                window.print();
+
             });
 
 
-            // DOWNLOAD PDF
+        // =====================================
+        // 8. EXPORT PDF FUNCTION
+        // =====================================
 
-            doc.save("Loan_Simulator_Report.pdf");
+        document.getElementById("pdfButton")
+            .addEventListener("click", function() {
 
-        });
+                if (!currentSimulation) {
+
+                    alert(translate("errorCalculate"));
+
+                    return;
+
+                }
+
+
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+
+                    alert(translate("errorPDF"));
+
+                    return;
+
+                }
+
+
+                const { jsPDF } = window.jspdf;
+
+                const doc = new jsPDF({
+
+                    orientation: "landscape",
+
+                    unit: "mm",
+
+                    format: "a4"
+
+                });
+
+
+                const simulation = currentSimulation;
+
+                const t = translations[currentLanguage];
+
+
+                // PDF TITLE
+
+                doc.setFont("helvetica", "bold");
+
+                doc.setFontSize(22);
+
+                doc.setTextColor(22, 50, 79);
+
+                doc.text("Loan Simulator", 15, 20);
+
+
+                doc.setFont("helvetica", "normal");
+
+                doc.setFontSize(10);
+
+                doc.setTextColor(120, 135, 150);
+
+                doc.text(t.pdfSubtitle, 15, 27);
+
+
+                // SUMMARY TITLE
+
+                doc.setTextColor(38, 52, 69);
+
+                doc.setFontSize(11);
+
+                doc.setFont("helvetica", "bold");
+
+                doc.text(t.pdfSummary, 15, 39);
+
+
+                // SUMMARY DATA
+
+                const rateLabel =
+                    simulation.rateType === "EA"
+                    ? t.annualRate
+                    : t.monthlyRate;
+
+
+                const summary = [
+
+                    [t.pdfAmount, formatNumber(simulation.amount)],
+
+                    [t.pdfRate, simulation.interest + "% " + rateLabel],
+
+                    [t.pdfMonthlyRate, (simulation.monthlyRate * 100).toFixed(4) + "%"],
+
+                    [t.pdfTerm, simulation.months + " " +
+                        (currentLanguage === "es" ? "meses" : "months")],
+
+                    [t.pdfPayment, formatNumber(simulation.payment)],
+
+                    [t.pdfTotalInterest, formatNumber(simulation.totalInterest)],
+
+                    [t.pdfTotalPayment, formatNumber(simulation.totalPayment)]
+
+                ];
+
+
+                let y = 47;
+
+                doc.setFontSize(9);
+
+
+                summary.forEach((item, index) => {
+
+                    const x = index % 2 === 0 ? 15 : 155;
+
+                    const currentY = y + Math.floor(index / 2) * 7;
+
+                    doc.setFont("helvetica", "bold");
+
+                    doc.text(item[0] + ":", x, currentY);
+
+                    doc.setFont("helvetica", "normal");
+
+                    doc.text(item[1], x + 43, currentY);
+
+                });
+
+
+                // TABLE HEADERS
+
+                const headers = [[
+
+                    t.columnMonth,
+
+                    t.columnInitial,
+
+                    t.columnPayment,
+
+                    t.columnInterest,
+
+                    t.columnPrincipal,
+
+                    t.columnFinal
+
+                ]];
+
+
+                // TABLE CONTENT
+
+                const tableData = simulation.schedule.map(row => [
+
+                    row.month,
+
+                    formatNumber(row.initialBalance),
+
+                    formatNumber(row.payment),
+
+                    formatNumber(row.interest),
+
+                    formatNumber(row.capital),
+
+                    formatNumber(row.finalBalance)
+
+                ]);
+
+
+                // GENERATE PDF TABLE
+
+                doc.autoTable({
+
+                    startY: 76,
+
+                    head: headers,
+
+                    body: tableData,
+
+                    theme: "grid",
+
+                    margin: {
+
+                        left: 15,
+
+                        right: 15
+
+                    },
+
+                    styles: {
+
+                        font: "helvetica",
+
+                        fontSize: 8,
+
+                        cellPadding: 3,
+
+                        halign: "right"
+
+                    },
+
+                    headStyles: {
+
+                        fillColor: [22, 50, 79],
+
+                        textColor: [255, 255, 255],
+
+                        fontStyle: "bold",
+
+                        halign: "center"
+
+                    },
+
+                    alternateRowStyles: {
+
+                        fillColor: [244, 246, 248]
+
+                    },
+
+                    columnStyles: {
+
+                        0: { halign: "center" }
+
+                    },
+
+                    didDrawPage: function() {
+
+                        const pageHeight =
+                            doc.internal.pageSize.getHeight();
+
+                        const pageWidth =
+                            doc.internal.pageSize.getWidth();
+
+                        doc.setFontSize(8);
+
+                        doc.setTextColor(130, 140, 150);
+
+                        doc.text(
+
+                            t.pdfFooter,
+
+                            15,
+
+                            pageHeight - 8
+
+                        );
+
+                        doc.text(
+
+                            t.pdfPage + " " +
+                            doc.internal.getNumberOfPages(),
+
+                            pageWidth - 25,
+
+                            pageHeight - 8
+
+                        );
+
+                    }
+
+                });
+
+
+                // DOWNLOAD PDF
+
+                const fileName =
+                    currentLanguage === "es"
+                    ? "Simulacion_Prestamo.pdf"
+                    : "Loan_Simulator_Report.pdf";
+
+                doc.save(fileName);
+
+            });
+
+
+        // =====================================
+        // 9. INITIALIZE APPLICATION
+        // =====================================
+
+        updateLanguage();
 
     </script>
 
