@@ -5,24 +5,77 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Loan Simulator</title>
+
+    <!-- jsPDF library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+    <style>
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #results, #results * {
+                visibility: visible;
+            }
+
+            #results {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 10px;
+            }
+
+            th, td {
+                border: 1px solid black;
+                padding: 5px;
+                text-align: center;
+            }
+
+            thead {
+                display: table-header-group;
+            }
+
+            tr {
+                page-break-inside: avoid;
+            }
+
+            h1, h2 {
+                page-break-after: avoid;
+            }
+        }
+    </style>
 </head>
+
 <body>
 
     <h1>Loan Simulator</h1>
 
-    <form id="loanForm">
-        <label for="amount">Monto del préstamo:</label>
+    <!-- INPUT SECTION -->
+    <form id="loanForm" class="no-print">
+
+        <label for="amount">Monto del prestamo:</label>
         <input type="number" id="amount" min="0.01" step="0.01" required>
 
         <br><br>
 
-        <label for="interest">Porcentaje de tasa de interés:</label>
+        <label for="interest">Porcentaje de tasa de interes:</label>
         <input type="number" id="interest" min="0" step="0.01" required>
 
         <br><br>
 
         <label for="rateType">Tipo de tasa:</label>
-        <select id="rateType" required>
+        <select id="rateType">
             <option value="EM">Efectiva Mensual (EM)</option>
             <option value="EA">Efectiva Anual (EA)</option>
         </select>
@@ -34,38 +87,81 @@
 
         <br><br>
 
-        <button type="submit">Calcular préstamo</button>
+        <button type="submit">Calcular prestamo</button>
+
     </form>
 
-    <h2>Resultados</h2>
+    <!-- RESULTS SECTION -->
+    <section id="results">
 
-    <p id="monthlyPayment"></p>
-    <p id="effectiveRate"></p>
+        <h2>Resultados del prestamo</h2>
 
-    <h2>Tabla de amortización</h2>
+        <p id="loanAmount"></p>
+        <p id="originalRate"></p>
+        <p id="effectiveRate"></p>
+        <p id="loanTerm"></p>
+        <p id="monthlyPayment"></p>
 
-    <table border="1" id="amortizationTable">
-        <thead>
-            <tr>
-                <th>Mes</th>
-                <th>Saldo inicial</th>
-                <th>Cuota</th>
-                <th>Intereses</th>
-                <th>Abono a capital</th>
-                <th>Saldo final</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-        </tbody>
-    </table>
+        <h2>Tabla de amortizacion</h2>
+
+        <table border="1" id="amortizationTable">
+
+            <thead>
+                <tr>
+                    <th>Mes</th>
+                    <th>Saldo inicial</th>
+                    <th>Cuota</th>
+                    <th>Intereses</th>
+                    <th>Abono a capital</th>
+                    <th>Saldo final</th>
+                </tr>
+            </thead>
+
+            <tbody id="tableBody">
+            </tbody>
+
+        </table>
+
+    </section>
+
+    <br>
+
+    <!-- ACTION BUTTONS -->
+    <div class="no-print">
+
+        <button type="button" id="printButton" disabled>
+            Imprimir
+        </button>
+
+        <button type="button" id="pdfButton" disabled>
+            Exportar a PDF
+        </button>
+
+    </div>
 
     <script>
+
         const form = document.getElementById("loanForm");
 
+        const printButton = document.getElementById("printButton");
+        const pdfButton = document.getElementById("pdfButton");
+
+        // Store the latest valid simulation
+        let currentSimulation = null;
+
+        // Format numbers
+        function formatNumber(value) {
+            return value.toLocaleString("es-CO", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+        }
+
+        // CALCULATE LOAN
         form.addEventListener("submit", function(event) {
+
             event.preventDefault();
 
-            // Obtener los valores ingresados
             const amount = parseFloat(
                 document.getElementById("amount").value
             );
@@ -80,7 +176,7 @@
                 document.getElementById("months").value
             );
 
-            // Validar los datos
+            // VALIDATION
             if (
                 !Number.isFinite(amount) ||
                 !Number.isFinite(interest) ||
@@ -89,19 +185,24 @@
                 interest < 0 ||
                 months <= 0
             ) {
-                alert("Por favor, ingrese valores válidos.");
+                alert("Por favor, ingrese valores validos.");
                 return;
             }
 
-            // Convertir el porcentaje a decimal
+            if (rateType === "EA" && interest > 100000) {
+                alert("La tasa anual ingresada es demasiado alta.");
+                return;
+            }
+
+            // Convert percentage into decimal
             let rate = interest / 100;
 
-            // Convertir EA a EM si es necesario
+            // Convert EA into EM
             if (rateType === "EA") {
                 rate = Math.pow(1 + rate, 1 / 12) - 1;
             }
 
-            // Calcular la cuota fija (método francés)
+            // FRENCH AMORTIZATION SYSTEM
             let payment;
 
             if (rate === 0) {
@@ -113,67 +214,297 @@
                     (Math.pow(1 + rate, months) - 1);
             }
 
-            // Mostrar resultados
-            document.getElementById("monthlyPayment").textContent =
-                "Cuota mensual: " + payment.toFixed(2);
-
-            document.getElementById("effectiveRate").textContent =
-                "Tasa efectiva mensual: " +
-                (rate * 100).toFixed(4) + "%";
-
-            // Generar tabla de amortización
-            const tableBody = document.getElementById("tableBody");
-            tableBody.innerHTML = "";
-
+            // Generate amortization schedule
             let balance = amount;
+            let schedule = [];
 
             for (let month = 1; month <= months; month++) {
 
                 const initialBalance = balance;
 
-                // Calcular intereses del mes
                 const interestPayment = initialBalance * rate;
 
-                // Calcular abono a capital
                 let capitalPayment = payment - interestPayment;
-
-                // Ajustar la última cuota para eliminar diferencias
-                // de redondeo
                 let actualPayment = payment;
 
+                // Adjust final payment for rounding
                 if (month === months) {
                     capitalPayment = initialBalance;
-                    actualPayment = capitalPayment + interestPayment;
+                    actualPayment =
+                        capitalPayment + interestPayment;
                 }
 
-                // Calcular saldo final
                 balance = initialBalance - capitalPayment;
 
                 if (Math.abs(balance) < 0.000001) {
                     balance = 0;
                 }
 
-                // Crear fila
+                schedule.push({
+                    month: month,
+                    initialBalance: initialBalance,
+                    payment: actualPayment,
+                    interest: interestPayment,
+                    capital: capitalPayment,
+                    finalBalance: balance
+                });
+            }
+
+            // Save simulation
+            currentSimulation = {
+                amount: amount,
+                interest: interest,
+                rateType: rateType,
+                monthlyRate: rate,
+                months: months,
+                payment: payment,
+                schedule: schedule
+            };
+
+            // DISPLAY RESULTS
+            document.getElementById("loanAmount").textContent =
+                "Monto del prestamo: " + formatNumber(amount);
+
+            document.getElementById("originalRate").textContent =
+                "Tasa ingresada: " + interest + "% " + rateType;
+
+            document.getElementById("effectiveRate").textContent =
+                "Tasa efectiva mensual: " +
+                (rate * 100).toFixed(4) + "%";
+
+            document.getElementById("loanTerm").textContent =
+                "Plazo: " + months + " meses";
+
+            document.getElementById("monthlyPayment").textContent =
+                "Cuota mensual: " + formatNumber(payment);
+
+            // DISPLAY AMORTIZATION TABLE
+            const tableBody = document.getElementById("tableBody");
+
+            tableBody.innerHTML = "";
+
+            schedule.forEach(rowData => {
+
                 const row = document.createElement("tr");
 
                 const values = [
-                    month,
-                    initialBalance.toFixed(2),
-                    actualPayment.toFixed(2),
-                    interestPayment.toFixed(2),
-                    capitalPayment.toFixed(2),
-                    balance.toFixed(2)
+                    rowData.month,
+                    formatNumber(rowData.initialBalance),
+                    formatNumber(rowData.payment),
+                    formatNumber(rowData.interest),
+                    formatNumber(rowData.capital),
+                    formatNumber(rowData.finalBalance)
                 ];
 
                 values.forEach(value => {
+
                     const cell = document.createElement("td");
+
                     cell.textContent = value;
+
                     row.appendChild(cell);
+
                 });
 
                 tableBody.appendChild(row);
-            }
+
+            });
+
+            // Enable action buttons
+            printButton.disabled = false;
+            pdfButton.disabled = false;
+
         });
+
+
+        // PRINT FUNCTION
+        printButton.addEventListener("click", function() {
+
+            if (!currentSimulation) {
+                alert("Primero debe calcular un prestamo.");
+                return;
+            }
+
+            window.print();
+
+        });
+
+
+        // EXPORT TO PDF FUNCTION
+        pdfButton.addEventListener("click", function() {
+
+            if (!currentSimulation) {
+                alert("Primero debe calcular un prestamo.");
+                return;
+            }
+
+            const { jsPDF } = window.jspdf;
+
+            const doc = new jsPDF({
+                orientation: "landscape",
+                unit: "mm",
+                format: "a4"
+            });
+
+            const simulation = currentSimulation;
+
+            const pageWidth = doc.internal.pageSize.getWidth();
+
+            let y = 20;
+
+            // DOCUMENT TITLE
+            doc.setFontSize(20);
+
+            doc.text("Loan Simulator", 15, y);
+
+            y += 12;
+
+            // LOAN INFORMATION
+            doc.setFontSize(11);
+
+            doc.text(
+                "Monto del prestamo: " +
+                formatNumber(simulation.amount),
+                15, y
+            );
+
+            y += 7;
+
+            doc.text(
+                "Tasa ingresada: " +
+                simulation.interest + "% " +
+                simulation.rateType,
+                15, y
+            );
+
+            y += 7;
+
+            doc.text(
+                "Tasa efectiva mensual: " +
+                (simulation.monthlyRate * 100).toFixed(4) + "%",
+                15, y
+            );
+
+            y += 7;
+
+            doc.text(
+                "Plazo: " + simulation.months + " meses",
+                15, y
+            );
+
+            y += 7;
+
+            doc.text(
+                "Cuota mensual: " +
+                formatNumber(simulation.payment),
+                15, y
+            );
+
+            y += 14;
+
+            // TABLE HEADER
+            const headers = [
+                "Mes",
+                "Saldo inicial",
+                "Cuota",
+                "Intereses",
+                "Abono a capital",
+                "Saldo final"
+            ];
+
+            const columnWidths = [20, 45, 40, 40, 45, 45];
+
+            function drawTableHeader() {
+
+                let x = 15;
+
+                doc.setFontSize(9);
+                doc.setFont(undefined, "bold");
+
+                headers.forEach((header, index) => {
+
+                    doc.rect(
+                        x,
+                        y,
+                        columnWidths[index],
+                        9
+                    );
+
+                    doc.text(
+                        header,
+                        x + columnWidths[index] / 2,
+                        y + 6,
+                        { align: "center" }
+                    );
+
+                    x += columnWidths[index];
+
+                });
+
+                y += 9;
+
+                doc.setFont(undefined, "normal");
+
+            }
+
+            // DRAW TABLE
+            drawTableHeader();
+
+            doc.setFontSize(8);
+
+            simulation.schedule.forEach(row => {
+
+                // Create a new page if necessary
+                if (y > 185) {
+
+                    doc.addPage();
+
+                    y = 15;
+
+                    drawTableHeader();
+
+                }
+
+                const values = [
+                    String(row.month),
+                    formatNumber(row.initialBalance),
+                    formatNumber(row.payment),
+                    formatNumber(row.interest),
+                    formatNumber(row.capital),
+                    formatNumber(row.finalBalance)
+                ];
+
+                let x = 15;
+
+                values.forEach((value, index) => {
+
+                    doc.rect(
+                        x,
+                        y,
+                        columnWidths[index],
+                        8
+                    );
+
+                    doc.text(
+                        value,
+                        x + columnWidths[index] / 2,
+                        y + 5.5,
+                        { align: "center" }
+                    );
+
+                    x += columnWidths[index];
+
+                });
+
+                y += 8;
+
+            });
+
+            // DOWNLOAD PDF
+            doc.save("Loan_Simulator.pdf");
+
+        });
+
     </script>
 
 </body>
